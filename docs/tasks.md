@@ -42,7 +42,9 @@ gantt
 - [ ] Run `cdk init app --language python` inside the project root
 - [ ] Verify `app.py`, `cdk.json`, and `requirements.txt` are created
 - [ ] Replace default `requirements.txt` with project dependencies (see below)
-- [ ] Create and activate a virtual environment (`.venv/`)
+- [ ] Create the virtual environment with `uv venv .venv`
+- [ ] Activate it: `.venv\Scripts\activate` (Windows) or `source .venv/bin/activate` (Mac/Linux)
+- [ ] Install dependencies: `uv pip install -r requirements.txt`
 
 **`requirements.txt` target:**
 ```
@@ -59,6 +61,7 @@ moto[dynamodb,sqs,events]>=5.0.0
 **Acceptance criteria:**
 - `cdk synth` runs without errors and produces a CloudFormation template
 - `.venv/` is excluded via `.gitignore`
+- `uv pip list` shows all dependencies installed inside `.venv/`
 
 ---
 
