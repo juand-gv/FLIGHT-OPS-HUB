@@ -11,6 +11,28 @@ Target: **Python 3.12**. Use modern syntax exclusively. Do not use compatibility
 
 ---
 
+## Package Management
+
+Use **[uv](https://docs.astral.sh/uv/)** for all package and environment management. Do not use `pip` or `virtualenv` directly.
+
+### Common commands
+
+| Task | Command |
+|---|---|
+| Create virtual environment | `uv venv .venv` |
+| Activate (Windows) | `.venv\Scripts\activate` |
+| Install project dependencies | `uv pip install -r requirements.txt` |
+| Add a new package | `uv pip install <package>` then pin it in `requirements.txt` |
+| Run a script | `uv run python script.py` |
+| Sync after pulling changes | `uv pip install -r requirements.txt` |
+
+### Notes
+- The virtual environment always lives at `.venv/` (already in `.gitignore`)
+- `requirements.txt` is the source of truth — CDK projects use it by convention
+- Never commit a `uv.lock` file or `pyproject.toml` unless the project explicitly migrates to that format
+
+---
+
 ## File Headers
 
 Every `.py` file starts with a module docstring. Keep it concise — 3 sections max:
