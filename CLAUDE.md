@@ -2,7 +2,7 @@
 
 ## Always Read First
 - [README.md](README.md) — Project overview, architecture, event model, agent strategy, and CDK structure
-- [tasks.md](tasks.md) — Phased implementation task spec; check current progress and open tasks before starting any work
+- [tasks.md](docs/tasks.md) — Phased implementation task spec; check current progress and open tasks before starting any work
 
 ## Project Summary
 Event-driven airline disruption management system.
@@ -22,7 +22,7 @@ Goal: Stay within AWS Free Tier while applying enterprise-grade patterns.
 - Correlation IDs must be propagated end-to-end
 - All consumers must be idempotent
 - Every SQS queue must have a DLQ
-- **Before writing or reviewing any Python or CDK code, read [standards.md](standards.md)**
+- **Before writing or reviewing any Python or CDK code, read [standards.md](docs/standards.md)**
 
 ## CDK Conventions
 - One stack per concern: api_stack, event_bus_stack, consumer_stack, data_stack
