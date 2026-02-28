@@ -26,6 +26,9 @@ cdk.out/
 *.pem
 *.key
 
+# MCP local config (machine-specific — copy from .mcp.json.example)
+.mcp.json
+
 # IDE
 .vscode/
 .idea/
