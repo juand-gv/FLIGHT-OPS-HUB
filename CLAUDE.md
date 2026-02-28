@@ -22,6 +22,7 @@ Goal: Stay within AWS Free Tier while applying enterprise-grade patterns.
 - Correlation IDs must be propagated end-to-end
 - All consumers must be idempotent
 - Every SQS queue must have a DLQ
+- **Before writing or reviewing any Python or CDK code, read [standards.md](standards.md)**
 
 ## CDK Conventions
 - One stack per concern: api_stack, event_bus_stack, consumer_stack, data_stack
