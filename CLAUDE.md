@@ -2,6 +2,7 @@
 
 ## Always Read First
 - [README.md](README.md) — Project overview, architecture, event model, agent strategy, and CDK structure
+- [tasks.md](tasks.md) — Phased implementation task spec; check current progress and open tasks before starting any work
 
 ## Project Summary
 Event-driven airline disruption management system.
