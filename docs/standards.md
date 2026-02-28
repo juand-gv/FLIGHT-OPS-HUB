@@ -196,6 +196,27 @@ Standard keys to always include when available:
 
 ---
 
+## CDK Development — MCP Tools
+
+The **AWS IaC MCP server** (`awslabs.aws-iac-mcp-server`) is configured for this project. Use its tools actively when writing or reviewing CDK code — don't guess at APIs or property names.
+
+| When you are... | Use this MCP tool |
+|---|---|
+| Writing a new construct or stack | `search_cdk_documentation` — look up the exact L2 construct API |
+| Looking for a working example | `search_cdk_samples_and_constructs` — find Python samples |
+| Unsure about best practices | `cdk_best_practices` — returns security and architecture guidelines |
+| After `cdk synth`, before deploying | `validate_cloudformation_template` — catch schema errors early |
+| Checking IAM least-privilege | `check_cloudformation_template_compliance` — runs CDK Nag rules |
+| Debugging a failed `cdk deploy` | `troubleshoot_cloudformation_deployment` — root cause + fix |
+
+### Workflow for every new CDK file
+
+1. **Search docs first** — `search_cdk_documentation` with the construct name (e.g., `"aws_sqs.Queue dead letter queue"`)
+2. **Write the code** following the patterns below
+3. **Validate** — run `cdk synth` and pipe the output through `validate_cloudformation_template`
+
+---
+
 ## CDK Construct Structure
 
 ```python
