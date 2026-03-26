@@ -93,6 +93,152 @@ All events follow a versioned envelope to support schema evolution without break
 
 ---
 
+## 🧪 Local Event Testing
+
+> In this project **you are the event producer** — there is no upstream airline system. Use these commands to simulate disruption events after Phase 4 is deployed.
+>
+> Replace `$API_URL` with the CloudFormation output from `cdk deploy` (e.g. `https://abc123.execute-api.us-east-1.amazonaws.com`).
+
+### FlightDelayed
+
+```bash
+curl -X POST "$API_URL/disruptions" \
+  -H "Content-Type: application/json" \
+  -H "x-correlation-id: 7b2f4d90-1234-4abc-9def-000000000001" \
+  -d '{
+    "detail-type": "FlightDelayed",
+    "detail": {
+      "event_id": "550e8400-e29b-41d4-a716-446655440001",
+      "schema_version": "1.0",
+      "occurred_at": "2026-03-26T10:15:00Z",
+      "correlation_id": "7b2f4d90-1234-4abc-9def-000000000001",
+      "flight": {
+        "airline": "XX",
+        "flight_number": "1234",
+        "departure_date": "2026-03-26",
+        "origin": "MDE",
+        "destination": "ATL"
+      },
+      "delay_minutes": 145,
+      "reason_code": "WX"
+    }
+  }'
+```
+
+### FlightCancelled
+
+```bash
+curl -X POST "$API_URL/disruptions" \
+  -H "Content-Type: application/json" \
+  -H "x-correlation-id: 7b2f4d90-1234-4abc-9def-000000000002" \
+  -d '{
+    "detail-type": "FlightCancelled",
+    "detail": {
+      "event_id": "550e8400-e29b-41d4-a716-446655440002",
+      "schema_version": "1.0",
+      "occurred_at": "2026-03-26T11:00:00Z",
+      "correlation_id": "7b2f4d90-1234-4abc-9def-000000000002",
+      "flight": {
+        "airline": "XX",
+        "flight_number": "1234",
+        "departure_date": "2026-03-26",
+        "origin": "MDE",
+        "destination": "ATL"
+      },
+      "reason_code": "MX"
+    }
+  }'
+```
+
+### GateChanged
+
+```bash
+curl -X POST "$API_URL/disruptions" \
+  -H "Content-Type: application/json" \
+  -H "x-correlation-id: 7b2f4d90-1234-4abc-9def-000000000003" \
+  -d '{
+    "detail-type": "GateChanged",
+    "detail": {
+      "event_id": "550e8400-e29b-41d4-a716-446655440003",
+      "schema_version": "1.0",
+      "occurred_at": "2026-03-26T09:30:00Z",
+      "correlation_id": "7b2f4d90-1234-4abc-9def-000000000003",
+      "flight": {
+        "airline": "XX",
+        "flight_number": "5678",
+        "departure_date": "2026-03-26",
+        "origin": "MDE",
+        "destination": "JFK"
+      },
+      "old_gate": "B12",
+      "new_gate": "C04"
+    }
+  }'
+```
+
+### AircraftSwapped
+
+```bash
+curl -X POST "$API_URL/disruptions" \
+  -H "Content-Type: application/json" \
+  -H "x-correlation-id: 7b2f4d90-1234-4abc-9def-000000000004" \
+  -d '{
+    "detail-type": "AircraftSwapped",
+    "detail": {
+      "event_id": "550e8400-e29b-41d4-a716-446655440004",
+      "schema_version": "1.0",
+      "occurred_at": "2026-03-26T08:45:00Z",
+      "correlation_id": "7b2f4d90-1234-4abc-9def-000000000004",
+      "flight": {
+        "airline": "XX",
+        "flight_number": "9101",
+        "departure_date": "2026-03-26",
+        "origin": "ATL",
+        "destination": "MDE"
+      },
+      "old_aircraft": "B738",
+      "new_aircraft": "A320"
+    }
+  }'
+```
+
+### Idempotency test (re-send same event_id)
+
+```bash
+# Re-posting the same event_id should return 202 without re-publishing to EventBridge
+curl -X POST "$API_URL/disruptions" \
+  -H "Content-Type: application/json" \
+  -H "x-correlation-id: 7b2f4d90-1234-4abc-9def-000000000001" \
+  -d '{
+    "detail-type": "FlightDelayed",
+    "detail": {
+      "event_id": "550e8400-e29b-41d4-a716-446655440001",
+      "schema_version": "1.0",
+      "occurred_at": "2026-03-26T10:15:00Z",
+      "correlation_id": "7b2f4d90-1234-4abc-9def-000000000001",
+      "flight": {
+        "airline": "XX",
+        "flight_number": "1234",
+        "departure_date": "2026-03-26",
+        "origin": "MDE",
+        "destination": "ATL"
+      },
+      "delay_minutes": 145,
+      "reason_code": "WX"
+    }
+  }'
+```
+
+### Invalid payload test (expect 400)
+
+```bash
+curl -X POST "$API_URL/disruptions" \
+  -H "Content-Type: application/json" \
+  -d '{"detail-type": "FlightDelayed", "detail": {"event_id": "not-a-uuid"}}'
+```
+
+---
+
 ## 🤖 LLM Agent Strategy
 
 Five specialized agents act as force multipliers throughout the development lifecycle.
